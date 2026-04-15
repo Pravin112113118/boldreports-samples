@@ -48,7 +48,7 @@ jobs:
             Push-Location $dir
             dotnet restore | Out-Null
             snyk test --package-manager=nuget --severity-threshold=high --org=8104bd5d-c086-465d-a443-8e3b961f8e69 || $true
-            snyk monitor --package-manager=nuget --orgID=8104bd5d-c086-465d-a443-8e3b961f8e69 || $true
+            snyk monitor --package-manager=nuget --org=8104bd5d-c086-465d-a443-8e3b961f8e69 || $true
 
             Pop-Location
           }
