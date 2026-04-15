@@ -24,27 +24,35 @@ jobs:
       - name: Install Snyk
         run: npm install -g snyk
 
-      - name: Run Snyk (NuGet)
+      
+      - name: Run Snyk for all NuGet projects (robust)
+        shell: pwsh
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
-          set -e
+          Write-Host "Searching for .csproj files..."
+          $projects = Get-ChildItem -Recurse -Filter *.csproj
 
-          echo "Searching for .csproj and .sln files..."
-          mapfile -t projects < <(find . -name "*.csproj" -o -name "*.sln")
-
-          if [ ${#projects[@]} -eq 0 ]; then
-            echo "No .NET projects found. Skipping Snyk scan."
+          if ($projects.Count -eq 0) {
+            Write-Host "No NuGet projects found."
             exit 0
-          fi
+          }
 
-          for project in "${projects[@]}"; do
-            project_dir=$(dirname "$project")
-            echo "----------------------------------------"
-            echo "Running Snyk in $project_dir"
-            echo "----------------------------------------"
+          foreach ($project in $projects) {
+            $dir = $project.Directory.FullName
+            Write-Host "--------------------------------"
+            Write-Host "Scanning $($project.FullName)"
+            Write-Host "--------------------------------"
 
-            cd "$project_dir"
-            snyk test --package-manager=nuget --severity-threshold=high --orgID=8104bd5d-c086-465d-a443-8e3b961f8e69 || true
-            snyk monitor || true
-            cd - >/dev/null
-          done
+            Push-Location $dir
+
+            # Ensure NuGet context exists
+            dotnet restore | Out-Null
+
+            # Explicit NuGet scan
+            snyk test --package-manager=nuget --file=$($project.Name) --severity-threshold=high || $true
+            snyk monitor --package-manager=nuget --file=$($project.Name) || $true
+
+            Pop-Location
+          }
 
