@@ -43,7 +43,7 @@ jobs:
             echo "----------------------------------------"
 
             cd "$project_dir"
-            snyk test --package-manager=nuget --severity-threshold=high || true
+            snyk test --package-manager=nuget --severity-threshold=high --orgID=8104bd5d-c086-465d-a443-8e3b961f8e69 || true
             snyk monitor || true
             cd - >/dev/null
           done
