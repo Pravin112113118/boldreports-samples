@@ -45,11 +45,7 @@ jobs:
             Write-Host "--------------------------------"
 
             Push-Location $dir
-
-            # Ensure NuGet context exists
             dotnet restore | Out-Null
-
-            # Explicit NuGet scan
             snyk test --package-manager=nuget --file=$($project.Name) --severity-threshold=high || $true
             snyk monitor --package-manager=nuget --file=$($project.Name) || $true
 
