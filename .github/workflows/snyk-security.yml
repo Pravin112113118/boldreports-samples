@@ -27,10 +27,10 @@ jobs:
       - name: Run Snyk test (NuGet)
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --all-projects || true
+        run: snyk test --all-projects 
 
       - name: Snyk monitor
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk monitor || true
+        run: snyk monitor
 
