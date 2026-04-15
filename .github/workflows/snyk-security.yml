@@ -40,14 +40,15 @@ jobs:
 
           foreach ($project in $projects) {
             $dir = $project.Directory.FullName
+            $projectFile = $project.Name
             Write-Host "--------------------------------"
             Write-Host "Scanning $($project.FullName)"
             Write-Host "--------------------------------"
 
             Push-Location $dir
             dotnet restore | Out-Null
-            snyk test --package-manager=nuget --file=$($project.Name) --severity-threshold=high || $true
-            snyk monitor --package-manager=nuget --file=$($project.Name) || $true
+            snyk test --package-manager=nuget --file=$projectFile --severity-threshold=high || $true
+            snyk monitor --package-manager=nuget --file=$projectFile || $true
 
             Pop-Location
           }
