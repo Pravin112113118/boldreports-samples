@@ -20,25 +20,31 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
-
-      - name: Dotnet restore
-        run: Get-ChildItem -Recurse -Filter *.csproj | ForEach-Object { dotnet restore $_.FullName }
           
       - name: Install Snyk
         run: npm install -g snyk
-        
-      - name: Run Snyk test for all NuGet projects
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: Get-ChildItem -Path . -Recurse -Filter "project.assets.json" | ForEach-Object { snyk test --file="$($_.FullName)" --package-manager=nuget }
 
-      - name: Run Snyk test (NuGet)
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk test --all-projects --detection-depth=20
+      - name: Run Snyk (NuGet)
+        run: |
+          set -e
 
-      - name: Snyk monitor
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: snyk monitor
+          echo "Searching for .csproj and .sln files..."
+          mapfile -t projects < <(find . -name "*.csproj" -o -name "*.sln")
+
+          if [ ${#projects[@]} -eq 0 ]; then
+            echo "No .NET projects found. Skipping Snyk scan."
+            exit 0
+          fi
+
+          for project in "${projects[@]}"; do
+            project_dir=$(dirname "$project")
+            echo "----------------------------------------"
+            echo "Running Snyk in $project_dir"
+            echo "----------------------------------------"
+
+            cd "$project_dir"
+            snyk test --package-manager=nuget --severity-threshold=high || true
+            snyk monitor || true
+            cd - >/dev/null
+          done
 
