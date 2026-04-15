@@ -47,8 +47,8 @@ jobs:
 
             Push-Location $dir
             dotnet restore | Out-Null
-            snyk test --package-manager=nuget --file=$projectFile --severity-threshold=high || $true
-            snyk monitor --package-manager=nuget --file=$projectFile || $true
+            snyk test --package-manager=nuget --severity-threshold=high || $true
+            snyk monitor --package-manager=nuget || $true
 
             Pop-Location
           }
