@@ -20,9 +20,17 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
+
+      - name: Dotnet restore
+        run: Get-ChildItem -Recurse -Filter *.csproj | ForEach-Object { dotnet restore $_.FullName }
           
       - name: Install Snyk
         run: npm install -g snyk
+        
+      - name: Run Snyk test for all NuGet projects
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: Get-ChildItem -Path . -Recurse -Filter "project.assets.json" | ForEach-Object { snyk test --file="$($_.FullName)" --package-manager=nuget }
 
       - name: Run Snyk test (NuGet)
         env:
