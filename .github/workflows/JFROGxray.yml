@@ -18,6 +18,13 @@ jobs:
         JF_URL: https://trialyv58p0.jfrog.io/
         JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
 
+    
+    - name: Configure NuGet for JFrog CLI
+      run: |
+        jfrog nuget-config 
+          --repo-resolve nuget-virtual 
+          --server-id-resolve jfrog-art
+
     - name: Restore NuGet packages
       shell: pwsh
       run: jfrog nuget restore
