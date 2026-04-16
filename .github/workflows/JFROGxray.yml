@@ -25,8 +25,7 @@ jobs:
 
 
     - name: Restore NuGet packages
-      working-directory: boldreports-samplesBlazor/CustomSamples/DataFromClientToServerInBlazor
-      run: jfrog nuget restore DataFromClientToServerInBlazor.sln
+      run: jfrog nuget restore boldreports-samples/Blazor/CustomSamples/DataFromClientToServerInBlazor/DataFromClientToServerInBlazor.sln
 
     - name: Publish build info
       run: |
