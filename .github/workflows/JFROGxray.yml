@@ -21,7 +21,7 @@ jobs:
     
     - name: Configure NuGet for JFrog CLI
       run: |
-        jfrog nuget-config --repo-resolve sync-nugetdemo
+        jfrog nuget-config --repo-resolve sync-nugetdemo --username pravinkumar.dhanaraman@syncfusion.com
 
 
     - name: Restore NuGet packages
