@@ -21,11 +21,12 @@ jobs:
     
     - name: Configure NuGet for JFrog CLI
       run: |
-        jfrog nuget-config --repo-resolve sync-nugetdemo --username pravinkumar.dhanaraman@synfusion.com --password ${{ secrets.JFROG_ACCESS_TOKEN }}
+        jfrog nuget-config --repo-resolve sync-nugetdemo
 
 
     - name: Restore NuGet packages
-      run: jfrog nuget restore
+      working-directory: boldreports-samplesBlazor/CustomSamples/DataFromClientToServerInBlazor
+      run: jfrog nuget restore 
 
     - name: Publish build info
       run: |
