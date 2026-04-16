@@ -21,7 +21,11 @@ jobs:
     
     - name: Configure NuGet for JFrog CLI
       run: |
-        jfrog nuget-config --repo-resolve sync-nugetdemo 
+        jfrog config add nuget-server `
+        --url=https://trialy58p0.jfrog.io `
+        --user=pravinkumar.dhanaraman@syncfusion.com `
+        --access-token=${{ secrets.JF_ACCESS_TOKEN }} `
+        --interactive=false
 
 
     - name: Restore NuGet packages
