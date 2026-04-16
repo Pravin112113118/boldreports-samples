@@ -1,0 +1,30 @@
+name: JFrog NuGet Scan
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+
+jobs:
+  scan:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup JFrog CLI
+      uses: jfrog/setup-jfrog-cli@v4
+      env:
+        JF_URL: https://trialyv58p0.jfrog.io/
+        JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+
+    - name: Restore NuGet packages
+      run: jfrog nuget restore
+
+    - name: Publish build info
+      run: |
+        jfrog rt bce github-nuget-build ${{ github.run_number }}
+        jfrog rt bp github-nuget-build ${{ github.run_number }}
+
+    - name: Xray Scan
+      run: jfrog rt bs github-nuget-build ${{ github.run_number }} --fail
