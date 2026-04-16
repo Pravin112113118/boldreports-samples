@@ -24,7 +24,6 @@ jobs:
         jfrog nuget-config --repo-resolve nuget-virtual --server-id-resolve jfrog-art
 
     - name: Restore NuGet packages
-      shell: pwsh
       run: jfrog nuget restore
 
     - name: Publish build info
