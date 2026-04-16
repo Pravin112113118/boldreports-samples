@@ -22,7 +22,7 @@ jobs:
     - name: Configure NuGet for JFrog server with username
       run: |
         jfrog config add nuget-server `
-        --url=https://trialy58p0.jfrog.io `
+        --url=https://trialyv58p0.jfrog.io/ `
         --user=pravinkumar.dhanaraman@syncfusion.com `
         --access-token=${{ secrets.JF_ACCESS_TOKEN }} `
         --interactive=false
