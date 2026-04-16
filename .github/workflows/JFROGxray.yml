@@ -21,11 +21,24 @@ jobs:
     
     - name: Configure NuGet for JFrog CLI
       run: |
-        jfrog nuget-config --repo-resolve sync-nugetdemo --username pravinkumar.dhanaraman@syncfusion.com
+        jfrog nuget-config --repo-resolve sync-nugetdemo 
 
 
     - name: Restore NuGet packages
-      run: jfrog nuget restore boldreports-samples/Blazor/CustomSamples/DataFromClientToServerInBlazor/DataFromClientToServerInBlazor.sln
+      shell: pwsh
+      run: |
+            $projects = Get-ChildItem -Recurse -Filter *.csproj
+            foreach ($project in $projects) {
+              $dir = $project.Directory.FullName
+              $projectFile = $project.Name
+              Write-Host "--------------------------------"
+              Write-Host "Scanning $($project.FullName)"
+              Write-Host "--------------------------------"
+
+              Push-Location $dir
+              jfrog nuget restore
+              Pop-Location
+            }
 
     - name: Publish build info
       run: |
