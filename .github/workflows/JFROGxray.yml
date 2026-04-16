@@ -21,7 +21,7 @@ jobs:
     
     - name: Configure NuGet for JFrog CLI
       run: |
-        jfrog nuget-config --repo-resolve sync-nugetdemo --server-id-resolve npmjf
+        jfrog nuget-config --repo-resolve sync-nugetdemo
 
     - name: Restore NuGet packages
       run: jfrog nuget restore
