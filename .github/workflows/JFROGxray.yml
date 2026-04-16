@@ -19,6 +19,7 @@ jobs:
         JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
 
     - name: Restore NuGet packages
+      shell: pwsh
       run: jfrog nuget restore
 
     - name: Publish build info
