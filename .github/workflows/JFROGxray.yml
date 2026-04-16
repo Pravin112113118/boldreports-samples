@@ -21,9 +21,7 @@ jobs:
     
     - name: Configure NuGet for JFrog CLI
       run: |
-        jfrog nuget-config 
-          --repo-resolve nuget-virtual 
-          --server-id-resolve jfrog-art
+        jfrog nuget-config --repo-resolve nuget-virtual --server-id-resolve jfrog-art
 
     - name: Restore NuGet packages
       shell: pwsh
