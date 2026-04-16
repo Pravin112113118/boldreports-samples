@@ -33,7 +33,7 @@ jobs:
     - name: Restore NuGet packages
       shell: pwsh
       run: |
-            $projects = Get-ChildItem -Recurse -Filter *.csproj
+            $projects = Get-ChildItem -Recurse -Filter *.sln
             foreach ($project in $projects) {
               $dir = $project.Directory.FullName
               $projectFile = $project.Name
